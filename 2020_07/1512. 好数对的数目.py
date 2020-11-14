@@ -34,3 +34,4 @@ class Solution:
 xyb = Solution()
 result = xyb.numIdenticalPairs([1, 2, 3, 1, 1, 3])
 print(result)
+
