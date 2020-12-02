@@ -19,3 +19,4 @@ data/
 **/*.ipynb_checkpoints/
 
 test.py
+test.ipynb
