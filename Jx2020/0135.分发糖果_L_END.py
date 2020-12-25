@@ -25,6 +25,12 @@ v1.0:
 - 原本想用函数单调性写，但是不知怎么实现。
 v2.0:
 - 采用栈的思想实现了函数单调性
+v2.1（官方解答）：
+- 拆解问题，将规则拆分为两个规则分别处理：
+- 具体过程代码中说明
+v2.2（官方解答）：
+- 思路与自己的v2.0一样，但是代码设计巧妙了许多
+- 具体过程代码中说明
 '''
 
 class Solution:
@@ -88,3 +94,73 @@ class Solution_v2_0:
                     level_up(numlist,stack)
         # print(sum(numlist))
         return sum(numlist)
+
+
+class Solution_v2_1:
+    """
+    - 拆解问题，将规则拆分为两个规则分别处理：
+    >- 左规则：当 \textit{ratings}[i - 1] < \textit{ratings}[i]ratings[i−1]<ratings[i] 时，
+            i 号学生的糖果数量将比 i−1 号孩子的糖果数量多。
+    >- 右规则：当 \textit{ratings}[i] > \textit{ratings}[i + 1]ratings[i]>ratings[i+1] 时，
+            i 号学生的糖果数量将比 i+1 号孩子的糖果数量多。
+
+    我们遍历该数组两次，处理出每一个学生分别满足左规则或右规则时，最少需要被分得的糖果数量。每个人最终分得的糖果数量即为这两个数量的最大值。
+
+    具体地，以左规则为例：我们从左到右遍历该数组，假设当前遍历到位置 i，
+    如果有 \textit{ratings}[i - 1] < \textit{ratings}[i]ratings[i−1]<ratings[i]
+    那么 i 号学生的糖果数量将比 i−1 号孩子的糖果数量多，
+    我们令 \textit{left}[i] = \textit{left}[i - 1] + 1left[i]=left[i−1]+1 即可，
+    否则我们令 \textit{left}[i] = 1left[i]=1。
+
+    在实际代码中，我们先计算出左规则 \textit{left}left 数组，在计算右规则的时候只需要用单个变量记录当前位置的右规则，同时计算答案即可。
+    """
+    def candy(self, ratings: list) -> int:
+        n = len(ratings)
+        left = [0] * n
+        for i in range(n):
+            if i > 0 and ratings[i] > ratings[i - 1]:
+                left[i] = left[i - 1] + 1
+            else:
+                left[i] = 1
+
+        right = ret = 0
+        for i in range(n - 1, -1, -1):
+            if i < n - 1 and ratings[i] > ratings[i + 1]:
+                right += 1
+            else:
+                right = 1
+            ret += max(left[i], right)
+
+        return ret
+
+
+class Solution_v2_2:
+    def candy(self, ratings: list) -> int:
+        """
+        依据前面总结的规律，我们可以提出本题的解法。我们从左到右枚举每一个同学，记前一个同学分得的糖果数量为 \textit{pre}pre：
+            如果当前同学比上一个同学评分高，说明我们就在最近的递增序列中，直接分配给该同学 \textit{pre} + 1pre+1 个糖果即可。
+        否则我们就在一个递减序列中，我们直接分配给当前同学一个糖果，
+            并把该同学所在的递减序列中所有的同学都再多分配一个糖果，以保证糖果数量还是满足条件。
+        我们无需显式地额外分配糖果，只需要记录当前的递减序列长度，即可知道需要额外分配的糖果数量。
+        同时注意当当前的递减序列长度和上一个递增序列等长时，需要把最近的递增序列的最后一个同学也并进递减序列中。
+        这样，我们只要记录当前递减序列的长度 dec，最近的递增序列的长度 inc 和前一个同学分得的糖果数量 pre 即可。
+        """
+        n = len(ratings)
+        ret = 1
+        inc, dec, pre = 1, 0, 1
+
+        for i in range(1, n):
+            if ratings[i] >= ratings[i - 1]:
+                dec = 0
+                pre = (1 if ratings[i] == ratings[i - 1] else pre + 1)
+                ret += pre
+                inc = pre
+            else:
+                dec += 1
+                if dec == inc:
+                    dec += 1
+                ret += dec
+                pre = 1
+
+        return ret
+
