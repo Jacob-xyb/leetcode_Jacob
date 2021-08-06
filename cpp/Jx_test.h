@@ -1,10 +1,8 @@
-#pragma once
 #include <iostream>
 using namespace std;
 #include <vector>
 #include <algorithm>
+#include <unordered_map>
 
 // º¯ÊıÉùÃ÷
-void vector_015();
-
-#define test() vector_015()
+vector<int> twoSum_Jx001(vector<int>& nums, int target);
