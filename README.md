@@ -1,6 +1,8 @@
 # README
 
-目前只有python语言的解题，题库只包含LeetCode
+目前包含`python、cpp`语言的解题
+
+题库只包含LeetCode
 
 # 使用方式
 
@@ -13,3 +15,9 @@
 ## PC
 
 Mac直接搜，Windows下一个`Everything`
+
+# Log
+
+- 20210806
+
+开始追加cpp题解。
