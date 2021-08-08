@@ -5,4 +5,4 @@ using namespace std;
 #include <unordered_map>
 
 // º¯ÊıÉùÃ÷
-vector<int> twoSum_Jx001(vector<int>& nums, int target);
+int maxSubArray(vector<int>& nums);

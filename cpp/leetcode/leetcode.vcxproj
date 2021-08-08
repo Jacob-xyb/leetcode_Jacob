@@ -139,12 +139,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Jx2021\0001.两数之和_S_END.cpp" />
-    <ClCompile Include="..\Jx2021\0027.移除元素_S.cpp" />
+    <ClCompile Include="..\Jx2021\0053.最大子序和_S_END.cpp" />
     <ClCompile Include="..\leetcode_cpp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Jx_test.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Jx2021\0026.删除有序数组中的重复项_S_END.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
