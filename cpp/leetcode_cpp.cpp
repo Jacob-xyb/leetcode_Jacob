@@ -5,9 +5,10 @@ using namespace std;
 
 int main()
 {
-    vector<int> a{ -2,1,-3,4,-1,2,1,-5,4 };
-    cout << maxSubArray(a) << endl;
+    vector<int> a{ 9 };
+    cout << plusOne_Jx002(a)[0] << endl;
 
+    //cout << vector<int>{9, 9, 9} [0] << endl;
     system("pause");
     return 0;
 }

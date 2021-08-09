@@ -5,4 +5,4 @@ using namespace std;
 #include <unordered_map>
 
 // º¯ÊıÉùÃ÷
-int maxSubArray(vector<int>& nums);
+vector<int> plusOne_Jx002(vector<int>& digits);
