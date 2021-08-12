@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Jx2021\0053.最大子序和_S_END.cpp" />
+    <ClCompile Include="..\Jx2021\0118.杨辉三角_S.cpp" />
     <ClCompile Include="..\leetcode_cpp.cpp" />
   </ItemGroup>
   <ItemGroup>

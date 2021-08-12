@@ -5,4 +5,4 @@ using namespace std;
 #include <unordered_map>
 
 // º¯ÊıÉùÃ÷
-int maxSubArray(vector<int>& nums);
+vector<vector<int>> generate(int numRows);

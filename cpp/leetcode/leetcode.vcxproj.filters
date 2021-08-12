@@ -21,6 +21,9 @@
     <ClCompile Include="..\Jx2021\0053.最大子序和_S_END.cpp">
       <Filter>资源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\Jx2021\0118.杨辉三角_S.cpp">
+      <Filter>资源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Jx_test.h">
