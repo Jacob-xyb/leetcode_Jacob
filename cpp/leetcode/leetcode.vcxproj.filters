@@ -18,10 +18,14 @@
     <ClCompile Include="..\leetcode_cpp.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="..\Jx2021\0121.买卖股票的最佳时机_S_END.cpp">
       <Filter>资源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\Jx2021\0122.买卖股票的最佳时机II_S_END.cpp">
+=======
+    <ClCompile Include="..\Jx2021\0088.合并两个有序数组_S.cpp">
+>>>>>>> 84d140782c97f125396d940f1778c8cbeafa85f4
       <Filter>资源文件</Filter>
     </ClCompile>
   </ItemGroup>
