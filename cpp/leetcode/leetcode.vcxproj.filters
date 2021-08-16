@@ -18,10 +18,7 @@
     <ClCompile Include="..\leetcode_cpp.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\Jx2021\0121.买卖股票的最佳时机_S_END.cpp">
-      <Filter>资源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Jx2021\0122.买卖股票的最佳时机II_S_END.cpp">
+    <ClCompile Include="..\Jx2021\0167.两数之和II-输入有序数组_S.cpp">
       <Filter>资源文件</Filter>
     </ClCompile>
   </ItemGroup>

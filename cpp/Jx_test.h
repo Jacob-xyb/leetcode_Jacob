@@ -5,4 +5,4 @@ using namespace std;
 #include <unordered_map>
 
 // º¯ÊıÉùÃ÷
-vector<vector<int>> generate(int numRows);
+int singleNumber_Jx002(vector<int>& nums);
