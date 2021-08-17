@@ -5,4 +5,5 @@ using namespace std;
 #include <unordered_map>
 
 // º¯ÊıÉùÃ÷
-int singleNumber_Jx002(vector<int>& nums);
+vector<int> twoSum_Jx003(vector<int>& numbers, int target);
+

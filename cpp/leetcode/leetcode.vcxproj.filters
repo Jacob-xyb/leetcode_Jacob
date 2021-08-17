@@ -18,7 +18,7 @@
     <ClCompile Include="..\leetcode_cpp.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\Jx2021\0167.两数之和II-输入有序数组_S.cpp">
+    <ClCompile Include="..\Jx2021\0167.两数之和II-输入有序数组_S_END.cpp">
       <Filter>资源文件</Filter>
     </ClCompile>
   </ItemGroup>
