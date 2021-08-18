@@ -5,5 +5,5 @@ using namespace std;
 #include <unordered_map>
 
 // º¯ÊıÉùÃ÷
-vector<int> twoSum_Jx003(vector<int>& numbers, int target);
+bool containsDuplicate_Jx002(vector<int>& nums);
 
