@@ -140,7 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Jx2021\0167.两数之和II-输入有序数组_S_END.cpp" />
-    <ClCompile Include="..\Jx2021\0217.存在重复元素_S.cpp" />
+    <ClCompile Include="..\Jx2021\0217.存在重复元素_S_END.cpp" />
     <ClCompile Include="..\leetcode_cpp.cpp" />
   </ItemGroup>
   <ItemGroup>
