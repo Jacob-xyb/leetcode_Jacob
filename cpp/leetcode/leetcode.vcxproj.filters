@@ -18,7 +18,7 @@
     <ClCompile Include="..\leetcode_cpp.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\Jx2021\0228.汇总区间_S_END.cpp">
+    <ClCompile Include="..\Jx2021\0349.两个数组的交集_S.cpp">
       <Filter>资源文件</Filter>
     </ClCompile>
   </ItemGroup>
