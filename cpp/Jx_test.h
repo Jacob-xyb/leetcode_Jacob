@@ -8,7 +8,7 @@ using namespace std;
 #include <string>
 
 // º¯ÊıÉùÃ÷
-void sort_Isort_test();
+void reverse_test();
 
-#define test() sort_Isort_test()
+#define test() reverse_test()
 

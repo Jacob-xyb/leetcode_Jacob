@@ -21,6 +21,12 @@
     <ClCompile Include="..\Jx2021\剑指Offer22.链表中倒数第k个节点_S_END.cpp">
       <Filter>资源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\Jx2021\0502.IPO_H_TODO.cpp">
+      <Filter>资源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Jx2021\0007.整数反转_S.cpp">
+      <Filter>资源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Jx_test.h">
