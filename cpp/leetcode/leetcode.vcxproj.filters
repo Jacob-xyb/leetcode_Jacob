@@ -18,13 +18,10 @@
     <ClCompile Include="..\leetcode_cpp.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\Jx2021\剑指Offer22.链表中倒数第k个节点_S_END.cpp">
-      <Filter>资源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\Jx2021\0502.IPO_H_TODO.cpp">
       <Filter>资源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\Jx2021\0007.整数反转_S.cpp">
+    <ClCompile Include="..\Jx2021\0007.整数反转_S_END.cpp">
       <Filter>资源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,10 +29,5 @@
     <ClInclude Include="..\Jx_test.h">
       <Filter>头文件</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\Jx2021\0026.删除有序数组中的重复项_S_END.cpp">
-      <Filter>资源文件</Filter>
-    </None>
   </ItemGroup>
 </Project>
