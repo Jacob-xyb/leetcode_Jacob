@@ -171,6 +171,7 @@ class Solution:
 
 nums = [3, 2, 2, 3]
 val = 3
+
 res = Solution().removeElement(nums, val)
 ```
 
@@ -216,4 +217,42 @@ class Solution:
 ```
 
 执行用时：28 ms, 在所有 Python3 提交中击败了96.32%的用户
+
+# [0035. 搜索插入位置\_S_END](https://leetcode-cn.com/problems/search-insert-position/)
+
+给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。
+
+请必须使用时间复杂度为 `O(log n)` 的算法。
+
+- **v1.0**
+
+要求时间复杂度较低，因此采用遍历就不合适了，直接上二分法。
+
+吐槽：测试案例中居然遍历是最快的，测试案例没有覆盖完全呀。
+
+```python
+class Solution:
+    def searchInsert(self, nums: List[int], target: int) -> int:
+        left = 0
+        right = len(nums)-1
+        while left <= right:
+            mid = (left+right)//2
+            if nums[mid] == target:
+                return mid
+            elif nums[mid] > target:
+                right = mid - 1
+            else:
+                left = mid + 1
+        return left
+
+    
+nums = [1, 3, 5, 6]
+target = 0
+
+res = Solution().searchInsert(nums, target)
+```
+
+执行用时：32 ms, 在所有 Python3 提交中击败了86.77%的用户
+
+
 
