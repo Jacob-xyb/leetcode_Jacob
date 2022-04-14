@@ -98,7 +98,7 @@ res = Solution().twoSum(nums, target)
 
 执行用时：32 ms, 在所有 Python3 提交中击败了95.27%的用户
 
-# [0026. 删除有序数组中的重复项](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/)
+# [0026. 删除有序数组中的重复项\_S\_END](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/)
 
 给你一个 升序排列 的数组 `nums`，请你 `原地` 删除重复出现的元素，使每个元素 **只出现一次** ，返回删除后数组的新长度。元素的 **相对顺序** 应该保持 **一致** 。
 
@@ -145,4 +145,75 @@ class Solution:
         nums[:] = sorted(list(set(nums)))
         return len(nums)
 ```
+
+# [0027. 移除元素\_S_END](https://leetcode-cn.com/problems/remove-element/)
+
+给你一个数组 `nums` 和一个值 `val`，你需要 **原地** 移除所有数值等于 `val` 的元素，并返回移除后数组的新长度。
+
+不要使用额外的数组空间，你必须仅使用 `O(1)` 额外空间并 **原地 修改输入数组**。
+
+元素的顺序可以改变。你不需要考虑数组中超出新长度后面的元素。
+
+- **v1.0**
+
+依旧是简单的遍历，将不等于`val` 的元素放置数组中。
+
+```python
+class Solution:
+    def removeElement(self, nums: List[int], val: int) -> int:
+        index = 0
+        for i in range(len(nums)):
+            if nums[i] != val:
+                nums[index] = nums[i]
+                index += 1
+        return index
+
+
+nums = [3, 2, 2, 3]
+val = 3
+res = Solution().removeElement(nums, val)
+```
+
+执行用时：36 ms, 在所有 Python3 提交中击败了66.25%的用户
+
+- **v1.1**
+
+逆向写并不快多少
+
+```python
+class Solution:
+    def removeElement(self, nums: List[int], val: int) -> int:
+        valNum = 0
+        index = 0
+        numsLen = len(nums)
+        while index < (numsLen - valNum):
+            if nums[index] == val:
+                valNum += 1
+                nums[index] = nums[numsLen - valNum]
+            else:
+                index += 1
+        return numsLen - valNum
+```
+
+执行用时：32 ms, 在所有 Python3 提交中击败了87.09%的用户
+
+- **v1.2**
+
+双指针，yyds。
+
+```python
+class Solution:
+    def removeElement(self, nums: List[int], val: int) -> int:
+        slow,fast = 0,0
+        while fast < len(nums):
+            if nums[fast] == val:
+                fast += 1
+            else:
+                nums[slow] = nums[fast]
+                fast += 1
+                slow += 1
+        return slow
+```
+
+执行用时：28 ms, 在所有 Python3 提交中击败了96.32%的用户
 
