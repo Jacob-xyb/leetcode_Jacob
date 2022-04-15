@@ -254,5 +254,45 @@ res = Solution().searchInsert(nums, target)
 
 执行用时：32 ms, 在所有 Python3 提交中击败了86.77%的用户
 
+# [0053. 最大子数组和](https://leetcode-cn.com/problems/maximum-subarray/)
 
+给你一个整数数组 `nums` ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+
+**子数组** 是数组中的一个连续部分。
+
+- **示例：**
+
+```python
+输入：nums = [-2,1,-3,4,-1,2,1,-5,4]
+输出：6
+解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。
+```
+
+- **v1.0**
+
+最基础的思路，双重遍历，遇大取大，如果当前值 < 0 则退出内部循环，外部循环继续向前，但效率极低。
+
+```python
+class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        maxValue = nums[0]
+        for i in range(len(nums)):
+            tmpNum = nums[i]
+            maxValue = max(maxValue, tmpNum)
+			if nums[i] < 0:     # 如果遇到小于0的数，就没有必要在当前循环
+                continue
+            for j in range(i + 1, len(nums)):
+                tmpNum += nums[j]
+                maxValue = max(maxValue, tmpNum)
+                if tmpNum <= 0:
+                    break
+        return maxValue
+
+
+nums = [-2, 1, -3, 4, -1, 2, 1, -5, 4]    # 6
+target = 0
+res = Solution().maxSubArray(nums)
+```
+
+`超出时间限制`
 
