@@ -296,3 +296,67 @@ res = Solution().maxSubArray(nums)
 
 `超出时间限制`
 
+# [0066. 加一\_S_END](https://leetcode-cn.com/problems/plus-one/)
+
+给定一个由 **整数** 组成的 **非空** 数组所表示的非负整数，在该数的基础上加一。
+
+最高位数字存放在数组的首位， 数组中每个元素只存储**单个**数字。
+
+你可以假设除了整数 0 之外，这个整数不会以零开头。
+
+- **示例：**
+
+```python
+输入：digits = [1,2,3]
+输出：[1,2,4]
+解释：输入数组表示数字 123。
+```
+
+- **v1.0**
+
+很直接的思路，循环遍历一次，但执行效率好像不理想。
+
+```python
+class Solution:
+    def plusOne(self, digits: List[int]) -> List[int]:
+        dLen = len(digits)
+        for i in range(dLen-1, -1, -1):
+            digits[i] += 1
+            if digits[i] == 10:
+                digits[i] = 0
+            else:
+                return digits
+        digits.insert(0, 1)
+        return digits
+    
+
+nums = [9, 9, 9, 9]
+
+target = 0
+res = Solution().plusOne(nums)
+```
+
+执行用时：44 ms, 在所有 Python3 提交中击败了12.50%的用户
+
+- **v1.1**
+
+改进一下，如果遇到9，就减少一次加法，速度有所提升。
+
+```python
+class Solution:
+    def plusOne(self, digits: List[int]) -> List[int]:
+        dLen = len(digits)
+        for i in range(dLen-1, -1, -1):
+            if digits[i] == 9:
+                digits[i] = 0
+            else:
+                digits[i] += 1
+                return digits
+        digits.insert(0, 1)
+        return digits
+```
+
+执行用时：36 ms, 在所有 Python3 提交中击败了66.16%的用户
+
+**Tips:** 和最快案例是一致的。
+
