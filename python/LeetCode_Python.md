@@ -539,3 +539,130 @@ class Solution:
 执行用时：24 ms, 在所有 Python3 提交中击败了99.29%的用户
 
 **Tips:** 果然只有不断打磨代码，才有可能巅峰造极，只要肯深究，多尝试，就有无限可能。
+
+# [0119. 杨辉三角 II\_S_END](https://leetcode-cn.com/problems/pascals-triangle-ii/)
+
+给定一个非负索引 `rowIndex`，返回「杨辉三角」的第 `rowIndex` 行。
+
+在「杨辉三角」中，每个数是它左上方和右上方的数的和。
+
+- **示例：**
+
+```python
+输入: rowIndex = 3
+输出: [1,3,3,1]
+输入: rowIndex = 0
+输出: [1]
+```
+
+- **v1.0**
+
+有了 杨辉三角 的构造经验，只需要从头开始构造，就能获得第 `rowIndex` 行，效率还算可以。
+
+```python
+class Solution:
+    def getRow(self, rowIndex: int) -> List[int]:
+        if rowIndex == 0:
+            return [1]
+        elif rowIndex == 1:
+            return [1, 1]
+        preList = [1, 1]
+        for row in range(2, rowIndex + 1):
+            tempList = [1] * (row + 1)
+            for i in range(1, row):  # 对上一行遍历,最后一个1不算（len = row+1)
+                tempList[i] = preList[i] + preList[i - 1]
+            preList = tempList
+        return preList
+
+
+res = Solution().getRow(5)
+```
+
+执行用时：32 ms, 在所有 Python3 提交中击败了86.98%的用户
+
+- **v1.1**
+
+数学问题，杨辉三角的每行通项都是二项式定理展开的系数，第n行第m个数是C(n,m)，Pythonic写法
+
+```python
+from math import comb
+class Solution:
+    def getRow(self, rowIndex: int) -> List[int]:
+        return [comb(rowIndex, i) for i in range(rowIndex+1)]
+```
+
+执行用时：40 ms, 在所有 Python3 提交中击败了40.08%的用户
+
+---
+
+然后还有更优化的方法吗？再深入的话就需要深刻理解 `杨辉三角形` 了。
+
+杨辉三角具有以下性质：
+
+1. 每行数字左右对称，由 1 开始逐渐变大再变小，并最终回到 1。
+
+2. 第 n 行（从 0 开始编号）的数字有 n+1 项，前 n 行共有 $\frac{n(n+1)}{2}$ 个数。
+
+3. 第 n 行的第 m 个数（从 0 开始编号）可以被表示为组合数 $\mathcal{C}(n,m)$，记作 $\mathcal{C}_n^m$ 或 $\binom{n}{m}$ ，即为从 n 个不同元素中取 m 个元素的组合数。我们可以用公式来表示它：$\mathcal{C}_n^m=\dfrac{n!}{m!(n-m)!}$
+
+4. 每个数字等于上一行的左右两个数字之和，可用此性质写出整个杨辉三角。即第 n 行的第 i 个数等于第 n−1 行的第 i−1 个数和第 i 个数之和。这也是组合数的性质之一，即 $\mathcal{C}_n^i=\mathcal{C}_{n-1}^i+\mathcal{C}_{n-1}^{i-1}$
+
+5. $(a+b)^n$ 的展开式（二项式展开）中的各项系数依次对应杨辉三角的第 n 行中的每一项。
+
+- **v1.2**
+
+在 v1.0 中采用了滚动数组的方式计算出第i行，能否只用一个数组呢？
+
+其实是可以的，由 $\mathcal{C}_n^i=\mathcal{C}_{n-1}^i+\mathcal{C}_{n-1}^{i-1}$ 可知，每次计算第 i 项后，下次计算就不与当前 i 产生关系，即每次计算当前的值，往前推进即可在一个数组里面计算完。
+
+简单示例，以 rowIndex = 4 为例：
+
+```python
+res = [1, 0, 0, 0]		# 初始化数组
+res = [1, 1, 0, 0]		# row = 2
+res = [1, 2, 1, 0]		# row = 3
+# 计算结束前，再细化一次计算
+res = [1, 2, 1, 1]		# step 1, res[-1] = res[-1] + res[-2]
+res = [1, 2, 3, 1]		# step 2, res[-2] = res[-2] + res[-3]
+res = [1, 3, 3, 1]		# strp 3, res[-3] = res[-3] + res[-4]
+```
+
+code:
+
+```python
+class Solution:
+    def getRow(self, rowIndex: int) -> List[int]:
+        rowIndex += 1
+        res = [0] * rowIndex
+        res[0] = 1
+        for i in range(1, rowIndex):
+            for j in range(i, 0, -1):       # 倒着计算
+                # res[j] = res[j] + res[j - 1]
+                res[j] += res[j - 1]
+        return res
+```
+
+执行用时：36 ms, 在所有 Python3 提交中击败了67.29%的用户
+
+- **v1.3**
+
+由组合数公式 $\mathcal{C}_n^m=\dfrac{n!}{m!(n-m)!}$  可以推出后一项与前一项的关系:
+$$
+\mathcal{C}_n^m=\mathcal{C}_n^{m-1} \times \dfrac{n-m+1}{m}
+$$
+此时 `n = rowIndex` , m 就是 第 n 行的 第 i 个 元素。
+
+```python
+class Solution:
+    def getRow(self, rowIndex: int) -> List[int]:
+        res = [0] * (rowIndex + 1)
+        res[0] = 1
+        for i in range(1, rowIndex+1):
+            res[i] = res[i - 1] * (rowIndex - i + 1) // i
+        return res
+```
+
+执行用时：28 ms, 在所有 Python3 提交中击败了96.31%的用户
+
+**Tips:** 这应该是最优解了。
+
