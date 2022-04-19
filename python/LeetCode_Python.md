@@ -439,7 +439,7 @@ class Solution:
 
 **Tips:** 其实这是最快案例，LeetCode日常波动。
 
-# [0118. 杨辉三角\_S](https://leetcode-cn.com/problems/pascals-triangle/)
+# [0118. 杨辉三角\_S_END](https://leetcode-cn.com/problems/pascals-triangle/)
 
 给定一个非负整数 *`numRows`，*生成「杨辉三角」的前 *`numRows`* 行。
 
@@ -479,3 +479,63 @@ res = Solution().generate(5)
 
 执行用时：36 ms, 在所有 Python3 提交中击败了63.41%的用户
 
+- **v1.1**
+
+v1.0方法还可以精简一些，但是效率几乎持平
+
+```python
+class Solution:
+    def generate(self, numRows: int) -> List[List[int]]:
+        res = [[1]]
+        row = 2
+        while row <= numRows:
+            tempList = [1] * row
+            for i in range(row-2):      # 对上一行遍历
+                tempList[i+1] = res[row-2][i] + res[row-2][i+1]
+            res.append(tempList)
+            row += 1
+        return res
+```
+
+执行用时：36 ms, 在所有 Python3 提交中击败了63.63%的用户
+
+- **v1.2**
+
+最佳案例，感觉最大的差距在于, `for` 循环 和 `while` 循环。
+
+```python
+class Solution:
+    def generate(self, numRows: int) -> List[List[int]]:
+        res = [[1]]
+        for i in range(2, numRows + 1):
+            row = [1]
+            prev = res[-1]
+            for j in range(1, len(prev)):
+                row.append(prev[j] + prev[j - 1])
+            row.append(1)
+            res.append(row)
+        return res
+```
+
+执行用时：28 ms, 在所有 Python3 提交中击败了94.45%的用户
+
+- **v1.3**
+
+由于上述案例，多产生了临时变量，明显拖慢速度，所以把自己的 `while` 改成 `for` 循环试试
+
+```python
+class Solution:
+    def generate(self, numRows: int) -> List[List[int]]:
+        res = [[1]]
+        for row in range(2, numRows+1):
+            tempList = [1] * row
+            for i in range(row-2):      # 对上一行遍历
+                tempList[i+1] = res[row-2][i] + res[row-2][i+1]
+            res.append(tempList)
+            row += 1
+        return res
+```
+
+执行用时：24 ms, 在所有 Python3 提交中击败了99.29%的用户
+
+**Tips:** 果然只有不断打磨代码，才有可能巅峰造极，只要肯深究，多尝试，就有无限可能。
