@@ -279,7 +279,7 @@ class Solution:
         for i in range(len(nums)):
             tmpNum = nums[i]
             maxValue = max(maxValue, tmpNum)
-			if nums[i] < 0:     # 如果遇到小于0的数，就没有必要在当前循环
+            if nums[i] < 0:     # 如果遇到小于0的数，就没有必要在当前循环
                 continue
             for j in range(i + 1, len(nums)):
                 tmpNum += nums[j]
