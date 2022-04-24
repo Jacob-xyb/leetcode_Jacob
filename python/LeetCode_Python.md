@@ -254,7 +254,7 @@ res = Solution().searchInsert(nums, target)
 
 执行用时：32 ms, 在所有 Python3 提交中击败了86.77%的用户
 
-# [0053. 最大子数组和\_S_TODO](https://leetcode-cn.com/problems/maximum-subarray/)
+# [0053. 最大子数组和\_S_END*](https://leetcode-cn.com/problems/maximum-subarray/)
 
 给你一个整数数组 `nums` ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
 
@@ -295,6 +295,173 @@ res = Solution().maxSubArray(nums)
 ```
 
 `超出时间限制`
+
+- **v1.1**
+
+**贪心算法**：如果当前指针所指元素之前的和小于0，则丢弃当前元素之前的和
+
+经过上面的教训，说明两次遍历是非常影响效率的方式，所以应该尝试一次遍历解决问题。
+
+首先思考为什么会采用两次遍历，是怕一次遍历出现这样的子数组:
+
+XXXXX`AAAAAABB`XXXXXXX
+
+XXXXXXXXXXX`BBCCCCC`XX
+
+其实并不会，因为舍弃A段的原因只能是A<0，不然ABC就会在一起，所以一次遍历能覆盖所有case。
+
+```python
+class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        res = nums[0]
+        tempSum = 0       # 暂时当前和
+        for i in range(len(nums)):
+            # 如果当前和小于等于0，就舍去，不然继续累加
+            if tempSum <= 0:
+                tempSum = nums[i]
+            else:
+                tempSum += nums[i]
+            # 这里为什么省去了 res = max(res, nums[i])，因为保证了 tempSum >= nums[i].
+            res = max(res, tempSum)
+        return res
+```
+
+执行用时：148 ms, 在所有 Python3 提交中击败了75.92%的用户
+
+- **v1.2**
+
+在 **v1.1** 基础上更 Pythonic 的写法，但是效率并不高：
+
+```python
+class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        res = nums[0]
+        tempSum = 0 
+        for i in range(len(nums)):
+            tempSum = max(nums[i], tempSum + nums[i])
+            res = max(res, tempSum)
+        return res
+```
+
+执行用时：188 ms, 在所有 Python3 提交中击败了45.16%的用户
+
+- **v1.3**
+
+**动态规划：** 
+
+假设 $\textit{nums}$ 数组的长度是 $n$，下标从 0 到 n-1。
+
+我们用 $f(i)$ 代表以第 $i$ 个数结尾的「连续子数组的最大和」，那么很显然我们要求的答案就是：
+$$
+\max_{0\le i \le n−1} {\{f(i)\}}
+$$
+因此我们只需要求出每个位置的 $f(i)$，然后返回 $f$ 数组中的最大值即可。那么我们如何求 $f(i)$ 呢？我们可以考虑 $\textit{nums}[i]$ 单独成为一段还是加入 $f(i−1)$ 对应的那一段，这取决于 $\textit{nums}[i]$ 和 $f(i-1) + \textit{nums}[i]$ 的大小，我们希望获得一个比较大的，于是可以写出这样的动态规划转移方程：
+
+$$
+f(i)=max\{f(i−1)+nums[i],nums[i]\}
+$$
+不难给出一个时间复杂度 $O(n)$、空间复杂度 $O(n)$ 的实现，即用一个 $f$ 数组来保存 $f(i)$ 的值，用一个循环求出所有 $f(i)$。考虑到 $f(i)$ 只和 $f(i-1)$ 相关，于是我们可以只用一个变量 $\textit{pre}$ 来维护对于当前 $f(i)$ 的$f(i−1)$ 的值是多少，从而让空间复杂度降低到 $O(1)$，这有点类似「滚动数组」的思想。
+
+但是实现的代码居然和 **v1.2** 完全一致，但是这是数学上严谨的推导，因为不会产生任何漏洞，思想上比 **v1.2** 更为严谨可靠。
+
+```python
+class Solution:
+    def maxSubArray(self, nums: List[int]) -> int:
+        res = nums[0]
+        fi_1 = 0 
+        for i in range(len(nums)):
+            fi_1 = max(fi_1 + nums[i], nums[i])
+            res = max(res, fi_1)
+        return res
+```
+
+- **v1.4**
+
+**分治**
+
+**这个分治方法类似于「线段树求解最长公共上升子序列问题」的 `pushUp` 操作。**
+
+我们定义一个操作 `get(a, l, r)` 表示查询 $a$ 序列 $[l,r]$ 区间内的最大子段和，那么最终我们要求的答案就是 `get(nums, 0, nums.size() - 1)`。如何分治实现这个操作呢？对于一个区间 $[l,r]$，我们取 $m = \lfloor \frac{l + r}{2} \rfloor$，对区间 $[l,m]$ 和 $[m+1,r]$ 分治求解。当递归逐层深入直到区间长度缩小为 1 的时候，递归「开始回升」。这个时候我们考虑如何通过 $[l,m]$区间的信息和 $[m+1,r]$ 区间的信息合并成区间 $[l,r]$ 的信息。最关键的两个问题是：
+
+- 我们要维护区间的哪些信息呢？
+- 我们如何合并这些信息呢？
+
+对于一个区间 $[l,r]$，我们可以维护四个量：
+
+- $\textit{lSum}$ 表示 $[l,r]$ 内以 $l$ 为左端点的最大子段和
+- $\textit{rSum}$ 表示 $[l,r]$ 内以 $r$ 为右端点的最大子段和
+- $\textit{mSum}$ 表示 $[l,r]$ 内的最大子段和
+- $\textit{iSum}$ 表示 $[l,r]$ 的区间和
+
+鉴于此，我们应该先搭建一个框架出来，不然后面很难理解。
+
+```python
+class Solution:
+    class Status:
+        def __init__(self, lSum, rSum, mSum, iSum):
+            self.lSum = lSum
+            self.rSum = rSum
+            self.mSum = mSum
+            self.iSum = iSum
+
+    def pushUp(self, lSub: Optional[Status], rSub: Optional[Status]):
+        # 暂时返回一个 lSub
+        return lSub
+
+    def get(self, nums, l, r):
+        if l == r:
+            return self.Status(nums[l], nums[l], nums[l], nums[l])
+        m = (l + r) // 2
+        lSub = self.get(nums, l, m)
+        rSub = self.get(nums, m+1, r)
+        return self.pushUp(lSub, rSub)
+
+    def maxSubArray(self, nums: List[int]) -> int:
+        return self.get(nums, 0, len(nums)-1).mSum
+```
+
+目前框架已经搭建完毕，最难的部分就是维护 `pushUp` 的区间了。
+
+以下简称 $[l,m]$ 为 $[l,r]$ 的「左子区间」，$[m+1,r]$ 为 $[l,r]$ 的「右子区间」。我们考虑如何维护这些量呢（如何通过左右子区间的信息合并得到 $[l,r]$ 的信息）？对于长度为 $1$ 的区间 $[i,i]$，四个量的值都和 $\textit{nums}[i]$ 相等。对于长度大于 $1$  的区间：
+
+- 首先最好维护的是 $\textit{iSum}$，区间 $[l,r]$ 的 $\textit{iSum}$ 就等于「左子区间」的$ \textit{iSum}$ 加上「右子区间」的 $\textit{iSum}$。`iSum = lSub.iSum + rSub.iSum`
+- 对于 $[l,r]$ 的 $\textit{lSum}$，存在两种可能，它要么等于「左子区间」的 $\textit{lSum}$，要么等于「左子区间」的 $\textit{iSum}$ 加上「右子区间」的 $\textit{lSum}$，二者取大。`lSum = max(lSub.lSum, lSub.iSum + rSub.lSum)`
+- 对于 $ [l,r]$  的 $\textit{rSum}$，同理，它要么等于「右子区间」的 $\textit{rSum}$，要么等于「右子区间」的 $\textit{iSum}$ 加上「左子区间」的 $\textit{rSum}$，二者取大。`rSum = max(rSub.rSum, rSub.iSum + lSub.rSum)`
+- 当计算好上面的三个量之后，就很好计算 $[l,r]$ 的 $\textit{mSum}$ 了。我们可以考虑 $[l,r]$ 的 $\textit{mSum}$ 对应的区间是否跨越 $m$——它可能不跨越 $m$，也就是说 $[l,r]$ 的 $\textit{mSum}$ 可能是「左子区间」的 $\textit{mSum}$ 和 「右子区间」的 $\textit{mSum}$ 中的一个；它也可能跨越 $m$，可能是「左子区间」的 $\textit{rSum}$ 和 「右子区间」的 $\textit{lSum}$ 求和。三者取大。这个应该是最难理解的。`mSum = max(lSub.mSum, rSub.mSum, lSub.rSum + rSub.lSum)`
+
+```python
+class Solution:
+    class Status:
+        def __init__(self, lSum, rSum, mSum, iSum):
+            self.lSum = lSum
+            self.rSum = rSum
+            self.mSum = mSum
+            self.iSum = iSum
+
+    def pushUp(self, lSub: Optional[Status], rSub: Optional[Status]) -> Optional[Status]:
+        iSum = lSub.iSum + rSub.iSum
+        lSum = max(lSub.lSum, lSub.iSum + rSub.lSum)
+        rSum = max(rSub.rSum, rSub.iSum + lSub.rSum)
+        mSum = max(lSub.mSum, rSub.mSum, lSub.rSum + rSub.lSum)
+        return self.Status(lSum, rSum, mSum, iSum)
+
+    def get(self, nums, l, r) -> Optional[Status]:
+        if l == r:
+            return self.Status(nums[l], nums[l], nums[l], nums[l])
+        m = (l + r) // 2
+        lSub = self.get(nums, l, m)
+        rSub = self.get(nums, m+1, r)
+        return self.pushUp(lSub, rSub)
+
+    def maxSubArray(self, nums: List[int]) -> int:
+        return self.get(nums, 0, len(nums)-1).mSum
+```
+
+执行用时：1080 ms, 在所有 Python3 提交中击败了5.20%的用户
+
+**Tips: **  **分治** 相较于 **动态规划** 来说，时间复杂度相同，但是因为使用了递归，并且维护了四个信息的结构体，运行的时间略长，空间复杂度也不如方法一优秀，而且难以理解。那么这种方法存在的意义是什么呢？
+
+对于这道题而言，确实是如此的。但是仔细观察**分治**，它不仅可以解决区间 $[0, n-1]$，还可以用于解决任意的子区间 $[l,r]$ 的问题。如果我们把 $[0, n-1]$ 分治下去出现的所有子区间的信息都用堆式存储的方式记忆化下来，即建成一颗真正的树之后，我们就可以在 $O(log n)$ 的时间内求到任意区间内的答案，我们甚至可以修改序列中的值，做一些简单的维护，之后仍然可以在 $O(log n)$ 的时间内求到任意区间内的答案，对于大规模查询的情况下，这种方法的优势便体现了出来。这棵树就是上文提及的一种神奇的数据结构——线段树。
 
 # [0066. 加一\_S_END](https://leetcode-cn.com/problems/plus-one/)
 
