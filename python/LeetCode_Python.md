@@ -833,3 +833,107 @@ class Solution:
 
 **Tips:** 这应该是最优解了。
 
+# [121. 买卖股票的最佳时机\_S_END](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/)
+
+给定一个数组 `prices` ，它的第 `i` 个元素 `prices[i]` 表示一支给定股票第 `i` 天的价格。
+
+你只能选择 **某一天** 买入这只股票，并选择在 **未来的某一个不同的日子** 卖出该股票。设计一个算法来计算你所能获取的最大利润。
+
+返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。
+
+- 示例：
+
+```python
+输入：[7,1,5,3,6,4]
+输出：5
+解释：在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。
+     注意利润不能是 7-1 = 6, 因为卖出价格需要大于买入价格；同时，你不能在买入前卖出股票。
+
+输入：prices = [7,6,4,3,1]
+输出：0
+解释：在这种情况下, 没有交易完成, 所以最大利润为 0。
+```
+
+- **v1.0**
+
+最先想到的是 **动态规划**
+
+买卖两天所获取的利润就是这两天之类每一天利润的叠加，所以可以吧每天股价的数组 `prices` 转换为`diff`， `diff[i] = prices[i+1] - prices[i]`，这样问题就转换成 `最大子数组和`。
+
+```python
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        maxSum, pre = 0, 0
+        for i in range(1, len(prices)):
+            temp_diff = prices[i] - prices[i-1]     # 当前利润
+            pre = max(temp_diff, pre + temp_diff)
+            maxSum = max(maxSum, pre)
+        return maxSum
+    
+    
+nums = [7, 1, 5, 3, 6, 4]
+
+res = Solution().maxProfit(nums)
+```
+
+执行用时：316 ms, 在所有 Python3 提交中击败了27.08%的用户
+
+- **v1.1**
+
+总感觉自己写判断，比 `max()` 函数更快一些。。
+
+```python
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        maxSum, pre = 0, 0
+        for i in range(1, len(prices)):
+            temp_diff = prices[i] - prices[i-1]     # 当前利润
+            if pre <= 0:
+                pre = temp_diff
+            else:
+                pre += temp_diff
+            maxSum = max(maxSum, pre)
+        return maxSum
+```
+
+执行用时：248 ms, 在所有 Python3 提交中击败了59.45%的用户
+
+- **v1.2**
+
+显然转换为 `最大子数和` 是把问题复杂化了，我们采用 `贪心算法` 来试一下。
+
+在这个问题中如何使用 `贪心算法` 呢？我们肯定是希望在股票的最低价买入，最高价卖出，但是先有买才有卖，所以我们先考虑最低价买入，此时只需要一个变量记录最低价 `minPrice` ，然后考虑往后的日子分别卖出的利润，如果遇到最低价就更新它。
+
+```python
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        res = 0
+        minPrice = prices[0]
+        for sold in prices[1:]:
+            res = max(res, sold - minPrice)
+            if sold < minPrice:
+                minPrice = sold
+        return res
+```
+
+执行用时：176 ms, 在所有 Python3 提交中击败了86.76%的用户
+
+- **v1.3**
+
+多次证明，`a = max(b, c)` 时，如果 `a = b or a = c` 时，推荐用 if 判断更加效率，少一次赋值操作。
+
+```python
+class Solution:
+    def maxProfit(self, prices: List[int]) -> int:
+        res = 0
+        minPrice = prices[0]
+        for sold in prices[1:]:
+            if sold-minPrice > res:
+                res = sold - minPrice
+            if sold < minPrice:
+                minPrice = sold
+        return res
+```
+
+执行用时：100 ms, 在所有 Python3 提交中击败了98.22%的用户
+
