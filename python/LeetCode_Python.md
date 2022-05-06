@@ -937,20 +937,6 @@ class Solution:
         return res
 ```
 
-# [1672. 最富有客户的资产总量\_S_END](https://leetcode-cn.com/problems/richest-customer-wealth/)
-
-- **v1.0**
-
-比较简单.
-
-执行用时：32 ms, 在所有 Python3 提交中击败了91.09%的用户
-
-```python
-class Solution:
-    def maximumWealth(self, accounts: List[List[int]]) -> int:
-        return max(map(sum, accounts))
-```
-
 # [0807. 保持城市天际线\_M_END](https://leetcode-cn.com/problems/max-increase-to-keep-city-skyline/)
 
 - **v1.0**
@@ -1012,6 +998,19 @@ class Solution:
         return sum(min(rowMax[i], colMax[j]) - h for i, row in enumerate(grid) for j, h in enumerate(row))
 ```
 
+# [1672. 最富有客户的资产总量\_S_END](https://leetcode-cn.com/problems/richest-customer-wealth/)
+
+- **v1.0**
+
+比较简单.
+
+执行用时：32 ms, 在所有 Python3 提交中击败了91.09%的用户
+
+```python
+class Solution:
+    def maximumWealth(self, accounts: List[List[int]]) -> int:
+        return max(map(sum, accounts))
+```
 
 
 # [2235. 两整数相加\_S_END](https://leetcode-cn.com/problems/add-two-integers/)
