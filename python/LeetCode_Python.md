@@ -922,6 +922,8 @@ class Solution:
 
 多次证明，`a = max(b, c)` 时，如果 `a = b or a = c` 时，推荐用 if 判断更加效率，少一次赋值操作。
 
+执行用时：100 ms, 在所有 Python3 提交中击败了98.22%的用户
+
 ```python
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
@@ -935,7 +937,19 @@ class Solution:
         return res
 ```
 
-执行用时：100 ms, 在所有 Python3 提交中击败了98.22%的用户
+# [1672. 最富有客户的资产总量\_S_END](https://leetcode-cn.com/problems/richest-customer-wealth/)
+
+- **v1.0**
+
+比较简单.
+
+执行用时：32 ms, 在所有 Python3 提交中击败了91.09%的用户
+
+```python
+class Solution:
+    def maximumWealth(self, accounts: List[List[int]]) -> int:
+        return max(map(sum, accounts))
+```
 
 # [0807. 保持城市天际线\_M_END](https://leetcode-cn.com/problems/max-increase-to-keep-city-skyline/)
 
