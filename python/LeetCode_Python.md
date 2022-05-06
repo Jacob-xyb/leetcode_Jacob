@@ -833,7 +833,7 @@ class Solution:
 
 **Tips:** 这应该是最优解了。
 
-# [121. 买卖股票的最佳时机\_S_END](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/)
+# [0121. 买卖股票的最佳时机\_S_END](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/)
 
 给定一个数组 `prices` ，它的第 `i` 个元素 `prices[i]` 表示一支给定股票第 `i` 天的价格。
 
@@ -937,7 +937,70 @@ class Solution:
 
 执行用时：100 ms, 在所有 Python3 提交中击败了98.22%的用户
 
-# [2235. 两整数相加_S_END](https://leetcode-cn.com/problems/add-two-integers/)
+# [0807. 保持城市天际线\_M_END](https://leetcode-cn.com/problems/max-increase-to-keep-city-skyline/)
+
+- **v1.0**
+
+傻瓜法：先算每行的最大高度，再算每列的最大高度，每个格子取当前行列的最大值的最小值，然后再算增加的高度
+
+执行用时：60 ms, 在所有 Python3 提交中击败了25.00%的用户
+
+```python
+class Solution:
+    def maxIncreaseKeepingSkyline(self, grid: List[List[int]]) -> int:
+        row = len(grid)
+        rowMaxList = [0] * row
+        colMaxList = [0] * row
+        res = 0
+        for i in range(row):
+            rowMaxList[i] = max(grid[i])
+        for j in range(row):
+            tempList = [0] * row
+            for i in range(row):
+                tempList[i] = grid[i][j]
+            colMaxList[j] = max(tempList)
+        for i in range(row):
+            for j in range(row):
+                res += min(rowMaxList[i], colMaxList[j]) - grid[i][j]
+        return res
+```
+
+- **v1.1**
+
+比较 Pythonic 的写法：
+
+执行用时：40 ms, 在所有 Python3 提交中击败了92.54%的用户
+
+```python
+class Solution:
+    def maxIncreaseKeepingSkyline(self, grid: List[List[int]]) -> int:
+        row = len(grid)
+        rowMaxList = list(map(max, grid))
+        colMaxList = list(map(max, zip(*grid)))
+        res = 0
+        for i in range(row):
+            for j in range(row):
+                res += min(rowMaxList[i], colMaxList[j]) - grid[i][j]
+        return res
+```
+
+- **v1.2**
+
+精简到极致的写法：
+
+执行用时：36 ms, 在所有 Python3 提交中击败了98.13%的用户
+
+```python
+class Solution:
+    def maxIncreaseKeepingSkyline(self, grid: List[List[int]]) -> int:
+        rowMax = list(map(max, grid))
+        colMax = list(map(max, zip(*grid)))
+        return sum(min(rowMax[i], colMax[j]) - h for i, row in enumerate(grid) for j, h in enumerate(row))
+```
+
+
+
+# [2235. 两整数相加\_S_END](https://leetcode-cn.com/problems/add-two-integers/)
 
 - **v1.0**
 
