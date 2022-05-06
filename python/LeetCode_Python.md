@@ -937,3 +937,15 @@ class Solution:
 
 执行用时：100 ms, 在所有 Python3 提交中击败了98.22%的用户
 
+# [2235. 两整数相加_S_END](https://leetcode-cn.com/problems/add-two-integers/)
+
+- **v1.0**
+
+我陷入了一分钟的思考，缓缓打出一行代码，它不会考我 `int` 的范围吧？两数范围在 `[-100, 100]` ，这...在侮辱我？
+
+```python
+class Solution:
+    def sum(self, num1: int, num2: int) -> int:
+        return num1 + num2
+```
+
