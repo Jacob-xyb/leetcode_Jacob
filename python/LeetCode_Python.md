@@ -30,6 +30,8 @@ from typing import *
 
 传统的双循环遍历，效率低下
 
+执行用时：3200 ms, 在所有 Python3 提交中击败了22.49%的用户
+
 ```python
 class Solution:
     def twoSum(self, nums: List[int], target: int) -> List[int]:
@@ -48,11 +50,11 @@ target = 9
 res = Solution().twoSum(nums, target)
 ```
 
-执行用时：3200 ms, 在所有 Python3 提交中击败了22.49%的用户
-
 - **v1.1**
 
 由于Python是解释性语言，因此语言本身的执行效率不高，调用内置函数，会有效提升效率
+
+执行用时：444 ms, 在所有 Python3 提交中击败了46.41%的用户
 
 ```python
 class Solution:
@@ -69,8 +71,6 @@ target = 9
 res = Solution().twoSum(nums, target)
 ```
 
-执行用时：444 ms, 在所有 Python3 提交中击败了46.41%的用户
-
 - **v1.2**
 
 在Python中，遇事不决用 Hash，暂时不明白原理，但是 Hash 就是很快。
@@ -78,6 +78,8 @@ res = Solution().twoSum(nums, target)
 思路就是，先建一个哈希表，如果需要寻找的目标数不在表中，那么就把当前 `num` 压入哈希表，以此反复。
 
 缺陷：只适用于两数相加的场景，三个数相加需要进行改良。
+
+执行用时：32 ms, 在所有 Python3 提交中击败了95.27%的用户
 
 ```python
 class Solution:
@@ -96,7 +98,90 @@ target = 9
 res = Solution().twoSum(nums, target)
 ```
 
-执行用时：32 ms, 在所有 Python3 提交中击败了95.27%的用户
+# [0011. 盛最多水的容器\_M_TODO](https://leetcode-cn.com/problems/container-with-most-water/)
+
+- **v1.0**
+
+已经没有全部遍历了，但还是超时，应该是没有bug的
+
+```python
+class Solution:
+    def maxArea(self, height: List[int]) -> int:
+        max_area = 0
+        for l in range(len(height) - 1):
+            if height[l]:
+                step = max_area // height[l] + 1
+                for r in range(l + step, len(height)):
+                    area = (r - l) * min(height[l], height[r])
+                    max_area = max(area, max_area)
+        return max_area
+```
+
+- **v1.1**
+
+让 **L** 变小的同时，尽可能的变大 **H**，好像效率还是不高。
+
+执行用时：256 ms, 在所有 Python3 提交中击败了17.74%的用户
+
+```python
+class Solution:
+    def maxArea(self, height: List[int]) -> int:
+        l, r, res = 0, len(height) - 1, 0  # 最小值
+        while l < r:
+            res = max(res, (r - l) * min(height[l], height[r]))
+            if height[l] < height[r]:
+                l += 1
+            else:
+                r -= 1
+        return res
+```
+
+- **v1.2**
+
+在 **v1.1** 的基础上，减少一次大小判断，提速不少。
+
+执行用时：180 ms, 在所有 Python3 提交中击败了75.48%的用户
+
+```python
+class Solution:
+    def maxArea(self, height: List[int]) -> int:
+        l, r, max_area = 0, len(height) - 1, 0  # 最小值
+        while l < r:
+            if height[l] < height[r]:
+                max_area = max(max_area, (r - l) * height[l])
+                l += 1
+            else:
+                max_area = max(max_area, (r - l) * height[r])
+                r -= 1
+        return res
+```
+
+- **v1.3**
+
+在 **v1.2** 基础上增加一次最大高度的判断，希望能提前终止循环，应该是最佳方案了。
+
+执行用时：48 ms, 在所有 Python3 提交中击败了99.98%的用户
+
+```python
+class Solution:
+    def maxArea(self, height: List[int]) -> int:
+        l, r = 0, len(height) - 1
+        max_area = 0
+        max_h = max(height)
+        while l < r:
+            # 如果最大高度*当前L都小于最大面积，则停止
+            if max_h * (r - l) < max_area:
+                break
+            if height[l] < height[r]:
+                max_area = max(max_area, (r - l) * height[l])
+                l += 1
+            else:
+                max_area = max(max_area, (r - l) * height[r])
+                r -= 1
+        return max_area
+```
+
+
 
 # [0026. 删除有序数组中的重复项\_S\_END](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/)
 
@@ -1010,6 +1095,32 @@ class Solution:
 class Solution:
     def maximumWealth(self, accounts: List[List[int]]) -> int:
         return max(map(sum, accounts))
+```
+
+# [1920. 基于排列构建数组\_S_END](https://leetcode-cn.com/problems/build-array-from-permutation/)
+
+- **v1.0**
+
+比较简单，一行代码
+
+```python
+class Solution:
+    def buildArray(self, nums: List[int]) -> List[int]:
+        return [nums[i] for i in nums]
+```
+
+# [1929. 数组串联\_S_END](https://leetcode-cn.com/problems/concatenation-of-array/)
+
+- **v1.0**
+
+这样的题多一些会给人增加自信
+
+```python
+class Solution:
+    def getConcatenation(self, nums: List[int]) -> List[int]:
+        ans = nums.copy()
+        ans.extend(nums)
+        return ans
 ```
 
 
