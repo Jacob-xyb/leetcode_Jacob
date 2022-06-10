@@ -1097,6 +1097,48 @@ class Solution:
         return max(map(sum, accounts))
 ```
 
+# [1828. 统计一个圆中点的数目_M_END](https://leetcode.cn/problems/queries-on-number-of-points-inside-a-circle/)
+
+- **v1.0**
+
+最简单的思路，双循环 + 点与圆的距离关系。
+
+双循环效率往往很低，并且这是一道中等题。
+
+执行用时：2452 ms, 在所有 Python3 提交中击败了20.79%的用户
+
+```python
+class Solution:
+    def countPoints(self, points: List[List[int]], queries: List[List[int]]) -> List[int]:
+        res = [0] * len(queries)
+        for idx, pq in enumerate(queries):
+            for ii, pp in enumerate(points):
+                if (pq[0] - pp[0]) ** 2 + (pq[1] - pp[1]) ** 2 <= pq[2] ** 2:
+                    res[idx] += 1
+        return res
+```
+
+- **v1.1**
+
+基于 v1.0 的思想，用简单判断快速去除不符合条件的点。
+
+执行用时：1892 ms, 在所有 Python3 提交中击败了69.89%的用户
+
+```python
+class Solution:
+    def countPoints(self, points: List[List[int]], queries: List[List[int]]) -> List[int]:
+        res = [0] * len(queries)
+        for idx, pq in enumerate(queries):
+            for ii, pp in enumerate(points):
+                if (abs(pq[0] - pp[0]) > pq[2]) or (pq[1] - pp[1] > pq[2]):
+                    continue
+                elif (pq[0] - pp[0]) ** 2 + (pq[1] - pp[1]) ** 2 <= pq[2] ** 2:
+                    res[idx] += 1
+        return res
+```
+
+看了下很快的案例用了 numpy，这有啥意思。。
+
 # [1920. 基于排列构建数组\_S_END](https://leetcode-cn.com/problems/build-array-from-permutation/)
 
 - **v1.0**
@@ -1123,6 +1165,23 @@ class Solution:
         return ans
 ```
 
+# [2011. 执行操作后的变量值_S_END](https://leetcode.cn/problems/final-value-of-variable-after-performing-operations/)
+
+- **v1.0**
+
+执行用时：40 ms, 在所有 Python3 提交中击败了56.97%的用户
+
+```python
+class Solution:
+    def finalValueAfterOperations(self, operations: List[str]) -> int:
+        X = 0
+        for item in operations:
+            if "+" in item:
+                X += 1
+            else:
+                X -= 1
+        return X 
+```
 
 # [2235. 两整数相加\_S_END](https://leetcode-cn.com/problems/add-two-integers/)
 
