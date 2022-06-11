@@ -1083,6 +1083,53 @@ class Solution:
         return sum(min(rowMax[i], colMax[j]) - h for i, row in enumerate(grid) for j, h in enumerate(row))
 ```
 
+# [1476. 子矩形查询_M_END](https://leetcode.cn/problems/subrectangle-queries/)
+
+- **v1.0**
+
+这。。。也是给予自信题。
+
+执行用时：88 ms, 在所有 Python3 提交中击败了84.09%的用户
+
+```python
+class SubrectangleQueries:
+    def __init__(self, rectangle: List[List[int]]):
+        self.rectangle = rectangle
+
+    def updateSubrectangle(self, row1: int, col1: int, row2: int, col2: int, newValue: int) -> None:
+        for row in range(row1, row2+1):
+            for col in range(col1, col2+1):
+                self.rectangle[row][col] = newValue
+
+    def getValue(self, row: int, col: int) -> int:
+        return self.rectangle[row][col]
+```
+
+- **v1.1**
+
+换一种思路，可以不直接改变数据，而是只记录改变过程，更具有效率，但是可能会暂用大量内存。
+
+执行用时：52 ms, 在所有 Python3 提交中击败了97.73%的用户
+
+```python
+class SubrectangleQueries:
+    def __init__(self, rectangle: List[List[int]]):
+        self.data = rectangle
+        self.update = []
+
+    def updateSubrectangle(self, row1: int, col1: int, row2: int, col2: int, newValue: int) -> None:
+        self.update.append((row1, col1, row2, col2, newValue))
+
+    def getValue(self, row: int, col: int) -> int:
+        res = None
+        for i in range(len(self.update)-1, -1, -1):
+            row1,col1,row2,col2, val = self.update[i]
+            if row1 <= row <= row2 and col1<= col <= col2:
+                res = val
+                break     
+        return res if res else self.data[row][col]
+```
+
 # [1672. 最富有客户的资产总量\_S_END](https://leetcode-cn.com/problems/richest-customer-wealth/)
 
 - **v1.0**
