@@ -1242,6 +1242,112 @@ class Solution:
         return num1 + num2
 ```
 
+# [2315. 统计星号_S_END](https://leetcode.cn/problems/count-asterisks/)
+
+- **v1.0**
+
+  执行用时：52 ms, 在所有 Python3 提交中击败了6.49%的用户
+
+  双指针，拼接字符串
+
+  ```python
+  class Solution:
+      def countAsterisks(self, s: str) -> int:
+          l_idx = 0
+          r_idx = s.find("|")
+          query = s[l_idx: r_idx]
+          count = 1
+          while True:
+              tmp = r_idx
+              r_idx = s.find("|", r_idx+1)
+              if r_idx == -1:
+                  query += s[tmp:]
+                  break
+              l_idx = tmp
+              count += 1
+              if count % 2 != 0:
+                  query += s[l_idx: r_idx]
+          return query.count('*')
+  ```
+
+- **v2.0**
+
+  执行用时：40 ms, 在所有 Python3 提交中击败了56.62%的用户
+
+  先记录每次 '|' 的index，然后用 * 的总和减去子字符串的和。
+
+  ```python
+  class SolutionV2:
+      def countAsterisks(self, s: str) -> int:
+          idxs = [s.find('|')]
+          res = s.count('*')
+          if idxs == [-1]:
+              return res
+          while True:
+              idxs.append(s.find('|', idxs[-1] + 1))
+              if idxs[-1] == -1:
+                  idxs.pop()
+                  break
+          for i in range(0, len(idxs), 2):
+              res -= s[idxs[i]:idxs[i + 1]].count('*')
+              i += 2
+          return res
+  ```
+
+- **v3.0**
+
+  最优解，直接用 split 函数
+
+  ```python
+  class SolutionV3:
+      def countAsterisks(self, s: str) -> int:
+          # 数学逻辑
+          array = s.split('|')
+          res = 0
+          for i in range(0, len(array), 2):
+              res += array[i].count('*')
+          return res
+  ```
+
+# [2396. 严格回文的数字_M_END](https://leetcode.cn/problems/strictly-palindromic-number/)
+
+- **v1.0**
+
+  执行用时：36 ms, 在所有 Python3 提交中击败了65.68%的用户
+
+  从大到小开始判断
+
+  ```python
+  class Solution:
+      def toStr(self, num, base):
+          convertString = "0123456789ABCDEF"  # 最大转换为16进制
+          if num < base:
+              return convertString[num]
+          else:
+              return self.toStr(num // base, base) + convertString[num % base]
+  
+      def isStrictlyPalindromic(self, n: int) -> bool:
+          if n > 16:
+              return False
+          for i in range(n - 2, 1, -1):
+              context = self.toStr(n, i)
+              if context != context[::-1]:
+                  return False
+          return True
+  ```
+
+# [2469. 温度转换_S_END](https://leetcode.cn/problems/convert-the-temperature/)
+
+签到题
+
+```python
+class Solution:
+    def convertTemperature(self, celsius: float) -> List[float]:
+        kelvin = celsius + 273.15
+        fahrenheit = celsius * 1.8 + 32
+        return [kelvin, fahrenheit]
+```
+
 # [剑指 Offer 58 - II. 左旋转字符串_S_END](https://leetcode.cn/problems/zuo-xuan-zhuan-zi-fu-chuan-lcof/)
 
 - **v1.0**
