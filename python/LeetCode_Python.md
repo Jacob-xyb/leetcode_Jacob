@@ -1130,6 +1130,55 @@ class SubrectangleQueries:
         return res if res else self.data[row][col]
 ```
 
+# [1669. 合并两个链表_M_END](https://leetcode.cn/problems/merge-in-between-linked-lists/)
+
+- **v1.0**
+
+  执行用时：400 ms, 在所有 Python3 提交中击败了26.04%的用户
+
+  常规思路，先找到a,b两个节点，然后重置list1的连接序列
+
+  ```python
+      def mergeInBetween(self, list1: ListNode, a: int, b: int, list2: ListNode) -> ListNode:
+          idx = 0
+          tmp_node = list1
+          while tmp_node.next:
+              if idx == a - 1:
+                  node_aL = tmp_node
+              elif idx == b:
+                  node_b = tmp_node
+                  break
+              tmp_node = tmp_node.next
+              idx += 1
+  
+          node_aL.next = list2
+          tmp_node = list2
+          while tmp_node.next:
+              tmp_node = tmp_node.next
+          tmp_node.next = node_b.next
+          return list1
+  ```
+
+- **v1.1**
+
+  执行用时：360 ms, 在所有 Python3 提交中击败了94.08%的用户
+
+  改良版，少了中间变量，逻辑更清晰。
+
+  ```python
+      def mergeInBetweenV1_1(self, list1: ListNode, a: int, b: int, list2: ListNode) -> ListNode:
+          cur = list1
+          for _ in range(a - 1):
+              cur = cur.next
+          cur.next, tail = list2, cur.next
+          for _ in range(a, b + 1):
+              tail = tail.next
+          while cur.next:
+              cur = cur.next
+          cur.next = tail
+          return list1
+  ```
+
 # [1672. 最富有客户的资产总量\_S_END](https://leetcode-cn.com/problems/richest-customer-wealth/)
 
 - **v1.0**
@@ -1143,6 +1192,49 @@ class Solution:
     def maximumWealth(self, accounts: List[List[int]]) -> int:
         return max(map(sum, accounts))
 ```
+
+# [1769. 移动所有球到每个盒子所需的最小操作数_M_END](https://leetcode.cn/problems/minimum-number-of-operations-to-move-all-balls-to-each-box/)
+
+- **v1.0**
+
+  执行用时：3060 ms, 在所有 Python3 提交中击败了36.66%的用户
+
+  暴力双循环
+
+  ```python
+      def minOperations(self, boxes: str) -> List[int]:
+          res = [0] * len(boxes)
+          idxes = []
+          for idx, item in enumerate(boxes):
+              if item == '1':
+                  idxes.append(idx)
+          for i in range(len(boxes)):
+              for j in range(len(idxes)):
+                  res[i] += abs(i - idxes[j])
+          return res
+  ```
+
+- **v2.0**
+
+  **根据前一个盒子的操作数得到下一个盒子的操作数**
+
+  ![image-20230130143223579](https://s2.loli.net/2023/01/30/InBrFksgvHzat39.png)
+
+  ```python
+      def minOperationsV2(self, boxes: str) -> List[int]:
+          bn = 0  # 球的总数
+          n = len(boxes)
+          bnl = [0] * n  # bnl[i]为 i 左侧球的数量
+          ans = [0] * n
+          for i, x in enumerate(boxes):
+              bnl[i] = bn
+              if x == '1':
+                  bn += 1
+                  ans[0] += i
+          for i in range(1, n):
+              ans[i] = ans[i - 1] + bnl[i] - (bn - bnl[i])
+          return ans
+  ```
 
 # [1828. 统计一个圆中点的数目_M_END](https://leetcode.cn/problems/queries-on-number-of-points-inside-a-circle/)
 
@@ -1347,6 +1439,41 @@ class Solution:
         fahrenheit = celsius * 1.8 + 32
         return [kelvin, fahrenheit]
 ```
+
+# [LCP 67. 装饰树_M_END](https://leetcode.cn/problems/KnLfVT/)
+
+- **v1.0**
+
+  执行用时：532 ms, 在所有 Python3 提交中击败了24.24%的用户
+
+  广度优先搜索
+
+  ```python
+      def expandBinaryTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+          if root.left:
+              tmp = TreeNode(-1, left=root.left)
+              root.left = tmp
+              self.expandBinaryTree(root.left.left)
+          if root.right:
+              tmp = TreeNode(-1, right=root.right)
+              root.right = tmp
+              self.expandBinaryTree(root.right.right)
+          return root
+  ```
+
+- **v1.1**
+
+  精简版，但是效率我认为差不多
+
+  ```python
+      def expandBinaryTreeV1_1(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+          # 有父节点插入，问题换为，如果有孩子节点，则插入
+          if root.left:
+              root.left = TreeNode(-1, left=self.expandBinaryTree(root.left))
+          if root.right:
+              root.right = TreeNode(-1, right=self.expandBinaryTree(root.right))
+          return root
+  ```
 
 # [剑指 Offer 58 - II. 左旋转字符串_S_END](https://leetcode.cn/problems/zuo-xuan-zhuan-zi-fu-chuan-lcof/)
 
