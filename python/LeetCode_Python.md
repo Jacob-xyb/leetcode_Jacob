@@ -1401,6 +1401,47 @@ class Solution:
           return res
   ```
 
+# [2319. 判断矩阵是否是一个 X 矩阵_S_END](https://leetcode.cn/problems/check-if-matrix-is-x-matrix/)
+
+- **v1.0**
+
+  执行用时：48 ms, 在所有 Python3 提交中击败了78.52%的用户
+
+  先判断0的个数是否能对应上，再循环遍历判断每行是否符合条件
+
+  ```python
+      def checkXMatrix(self, grid: List[List[int]]) -> bool:
+          n = len(grid)
+          normal_mun = n * n - (n * 2 - (n % 2))
+          count_num = 0
+          for l in grid:
+              count_num += l.count(0)
+          if normal_mun != count_num:
+              return False
+          for row in range(n):
+              if grid[row][row] == 0 or grid[row][n - 1 - row] == 0:
+                  return False
+          return True
+  ```
+
+- **v1.1**
+
+  非常无脑的双循环遍历
+
+  ```python
+      def checkXMatrixV1_1(self, grid: List[List[int]]) -> bool:
+          n = len(grid)
+          for i in range(n):  # 也可写为range(n)
+              for j in range(n):
+                  if i == j or i + j == n - 1:
+                      if grid[i][j] == 0:
+                          return False
+                  else:
+                      if grid[i][j] != 0:
+                          return False
+          return True
+  ```
+
 # [2396. 严格回文的数字_M_END](https://leetcode.cn/problems/strictly-palindromic-number/)
 
 - **v1.0**
