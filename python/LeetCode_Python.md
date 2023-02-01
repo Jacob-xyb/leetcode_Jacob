@@ -98,6 +98,60 @@ target = 9
 res = Solution().twoSum(nums, target)
 ```
 
+# [0002.两数相加_M_END](https://leetcode.cn/problems/add-two-numbers/)
+
+- **v1.0**
+
+  执行用时： 80 ms , 在所有 Python3 提交中击败了 7.50% 的用户
+
+  先解析链表，提出数字，相加后再写入链表，发现效率很低
+
+  ```python
+      def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+          num1_str = ""
+          num2_str = ""
+          node1 = l1
+          node2 = l2
+          while node1:
+              num1_str = str(node1.val) + num1_str
+              node1 = node1.next
+          while node2:
+              num2_str = str(node2.val) + num2_str
+              node2 = node2.next
+          num3_str = str(int(num1_str) + int(num2_str))
+          res = node3 = ListNode()
+          for c in num3_str[::-1]:
+              node3.next = ListNode(int(c))
+              node3 = node3.next
+          return res.next
+  ```
+
+- **v2.0**
+
+  执行用时: 60 ms , 在所有 Python3 提交中击败了 71.06% 的用户
+
+  直接在链表中进行计算，效率较高
+
+  ```python
+      def addTwoNumbersV2(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+          node1 = l1
+          node2 = l2
+          res = node3 = ListNode(0)
+          advance = 0
+          while node1 or node2:
+              val1 = node1.val if node1 else 0
+              val2 = node2.val if node2 else 0
+              node1 = node1.next if node1 else node1
+              node2 = node2.next if node2 else node2
+              val3 = val1 + val2 + advance
+              node3.next = ListNode(val3 % 10)
+              advance = val3 // 10
+              node3 = node3.next
+          if advance != 0:
+              node3.next = ListNode(advance)
+          return res.next
+  ```
+
 # [0011. 盛最多水的容器\_M_TODO](https://leetcode-cn.com/problems/container-with-most-water/)
 
 - **v1.0**
@@ -1442,6 +1496,44 @@ class Solution:
           return True
   ```
 
+# [2325. 解密消息_S_END](https://leetcode.cn/problems/decode-the-message/)
+
+- **v1.0**
+
+  非常常规的思路
+
+  ```python
+      def decodeMessage(self, key: str, message: str) -> str:
+          text = key.replace(" ", "")
+          table = {}
+          chr_id = 0
+          idx = 0
+          while idx < len(text) and chr_id < 26:
+              tmp = text[idx]
+              if not table.get(tmp):
+                  table[tmp] = chr(97 + chr_id)
+                  chr_id += 1
+              idx += 1
+          res = ""
+          for c in message:
+              res += table.get(c, c)
+          return res
+  ```
+
+- **v1.1**
+
+  v1.0版本的精简版
+
+  ```python
+      def decodeMessageV1_1(self, key: str, message: str) -> str:
+          import string
+          mp, it = {}, iter(string.ascii_lowercase)
+          for c in key:
+              if c != ' ' and c not in mp:
+                  mp[c] = next(it)
+          return ''.join(mp.get(c, c) for c in message)
+  ```
+
 # [2396. 严格回文的数字_M_END](https://leetcode.cn/problems/strictly-palindromic-number/)
 
 - **v1.0**
@@ -1479,6 +1571,76 @@ class Solution:
         kelvin = celsius + 273.15
         fahrenheit = celsius * 1.8 + 32
         return [kelvin, fahrenheit]
+```
+
+# [2535. 数组元素和与数字和的绝对差_S_END](https://leetcode.cn/problems/difference-between-element-sum-and-digit-sum-of-an-array/submissions/)
+
+- **v1.0**
+
+  执行用时：88 ms, 在所有 Python3 提交中击败了14.20%的用户
+
+  常规方法，辗转相除，不用计算个位数的差，然后逐一计算
+
+  ```python
+      def differenceOfSum(self, nums: List[int]) -> int:
+          def calculate_diff(num):
+              p = 1
+              diff = 0
+              quotient = num // 10
+              while quotient:
+                  tmp = quotient % 10
+                  diff += tmp * 10 ** p - tmp
+                  quotient //= 10
+                  p += 1
+              return diff
+  
+          res = 0
+          for i in nums:
+              res += calculate_diff(i)
+          return res
+  ```
+
+- **v1.1**
+
+  执行用时：48 ms, 在所有 Python3 提交中击败了95.89%的用户
+
+  换种思路，让循环变的更简单，直接对列表求和，然后再逐位求和，少了很多变量的释放和开销。
+
+  ```python
+      def differenceOfSumV1_1(self, nums: List[int]) -> int:
+          sum1 = sum(nums)
+          sum2 = 0
+          for num in nums:
+              while num:
+                  sum2 += num % 10
+                  num //= 10
+          return sum1 - sum2
+  ```
+
+- **v1.2**
+
+  更简洁的版本，在for循环里计算sum1，然后改良while循环，每次都少一步num的计算
+
+  ```python
+      def differenceOfSumV1_2(self, nums: List[int]) -> int:
+          sum1 = 0
+          sum2 = 0
+          for num in nums:
+              sum1 += num
+              while num >= 10:
+                  sum2 += num % 10
+                  num //= 10
+              sum2 += num
+          return sum1 - sum2
+  ```
+
+# [2545. 根据第 K 场考试的分数排序_M_END](https://leetcode.cn/problems/sort-the-students-by-their-kth-score/)
+
+Pythonic
+
+```python
+    def sortTheStudents(self, score: List[List[int]], k: int) -> List[List[int]]:
+        return sorted(score, key=lambda x: x[k], reverse=True)
 ```
 
 # [LCP 67. 装饰树_M_END](https://leetcode.cn/problems/KnLfVT/)
